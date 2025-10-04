@@ -45,6 +45,19 @@ public class YugiOhGui {
     private JLabel defMaq1;
     private JLabel defMaq2;
     private JLabel defMaq3;
+    private JCheckBox checkBox1;
+    private JCheckBox checkBox2;
+    private JCheckBox checkBox3;
+    private JCheckBox checkBox4;
+    private JCheckBox checkBox5;
+    private JCheckBox checkBox6;
+    private JButton PELEARButton;
+    private JProgressBar progressBar1;
+    private JProgressBar progressBar2;
+    private JProgressBar progressBar3;
+    private JProgressBar progressBar4;
+    private JProgressBar progressBar5;
+    private JProgressBar progressBar6;
 
     private int cartaSeleccionada = 1; // empieza en 1
     private int numCartas = 0;
@@ -53,6 +66,22 @@ public class YugiOhGui {
 
 
         obtenerCartas();
+        checkBox1.setVisible(false);
+        checkBox2.setVisible(false);
+        checkBox3.setVisible(false);
+        checkBox4.setVisible(false);
+        checkBox5.setVisible(false);
+        checkBox6.setVisible(false);
+        ButtonGroup grupo1 = new ButtonGroup();
+        grupo1.add(checkBox1);
+        grupo1.add(checkBox2);
+        grupo1.add(checkBox3);
+
+        ButtonGroup grupo2 = new ButtonGroup();
+        grupo2.add(checkBox4);
+        grupo2.add(checkBox5);
+        grupo2.add(checkBox6);
+
 
         seleccionarButton.addActionListener(new ActionListener() {
             @Override
@@ -68,6 +97,29 @@ public class YugiOhGui {
                         JOptionPane.showMessageDialog(mainPanel, "Ya seleccionaste las 3 cartas");
                         rellenarMaquina();
                     }
+                }
+            }
+        });
+        PELEARButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JCheckBox seleccionado = null;
+                JCheckBox seleccionado2 = null;
+
+                if (checkBox1.isSelected()) seleccionado = checkBox1;
+                if (checkBox2.isSelected()) seleccionado = checkBox2;
+                if (checkBox3.isSelected()) seleccionado = checkBox3;
+
+                if (checkBox4.isSelected()) seleccionado2 = checkBox4;
+                if (checkBox5.isSelected()) seleccionado2 = checkBox5;
+                if (checkBox6.isSelected()) seleccionado2 = checkBox6;
+
+                if (seleccionado != null && seleccionado2 != null) {
+                    System.out.println("Seleccionado: " + seleccionado.getText());
+                    System.out.println("Seleccionado: " + seleccionado2.getText());
+
+                }else{
+                    JOptionPane.showMessageDialog(mainPanel,"Aun te faltan cartas por elegir");
                 }
             }
         });
@@ -145,18 +197,21 @@ public class YugiOhGui {
                         atkUsu1.setText("Ataque: " + atk);
                         defUsu1.setText("Defensa: " + def);
                         imgUsu1.setIcon(new ImageIcon(scaledImg));
+                        checkBox1.setVisible(true);
                         break;
                     case 2:
                         nomUsu2.setText("Nombre: " + nombre);
                         atkUsu2.setText("Ataque: " + atk);
                         defUsu2.setText("Defensa: " + def);
                         imgUsu2.setIcon(new ImageIcon(scaledImg));
+                        checkBox2.setVisible(true);
                         break;
                     case 3:
                         nomUsu3.setText("Nombre: " + nombre);
                         atkUsu3.setText("Ataque: " + atk);
                         defUsu3.setText("Defensa: " + def);
                         imgUsu3.setIcon(new ImageIcon(scaledImg));
+                        checkBox3.setVisible(true);
                         break;
                 }
 
@@ -170,10 +225,9 @@ public class YugiOhGui {
     }
 
     public void rellenarMaquina(){
-        int intentos = 0;
+
             try {
                 while(numCartas < 3) {
-                    intentos++;
                     HttpClient httpClient = HttpClient.newBuilder()
                             .followRedirects(HttpClient.Redirect.ALWAYS)
                             .build();
@@ -221,18 +275,21 @@ public class YugiOhGui {
                                 atkMaq1.setText("Ataque: " + atk);
                                 defMaq1.setText("Defensa: " + def);
                                 imgMaq1.setIcon(new ImageIcon(scaledImg));
+                                checkBox4.setVisible(true);
                                 break;
                             case 2:
                                 nomMaq2.setText("Nombre: " + nombre);
                                 atkMaq2.setText("Ataque: " + atk);
                                 defMaq2.setText("Defensa: " + def);
                                 imgMaq2.setIcon(new ImageIcon(scaledImg));
+                                checkBox5.setVisible(true);
                                 break;
                             case 3:
                                 nomMaq3.setText("Nombre: " + nombre);
                                 atkMaq3.setText("Ataque: " + atk);
                                 defMaq3.setText("Defensa: " + def);
                                 imgMaq3.setIcon(new ImageIcon(scaledImg));
+                                checkBox6.setVisible(true);
                                 break;
                         }
 
@@ -246,6 +303,10 @@ public class YugiOhGui {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
+
+    }
+
+    public void fight(String Usuario, String Maquina){
 
     }
 
