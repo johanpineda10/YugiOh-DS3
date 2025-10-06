@@ -52,12 +52,6 @@ public class YugiOhGui {
     private JCheckBox checkBox5;
     private JCheckBox checkBox6;
     private JButton PELEARButton;
-    private JProgressBar progressBar1;
-    private JProgressBar progressBar2;
-    private JProgressBar progressBar3;
-    private JProgressBar progressBar4;
-    private JProgressBar progressBar5;
-    private JProgressBar progressBar6;
     private JButton LOGButton;
     private JLabel punUsu;
     private JLabel punMaq;
@@ -129,35 +123,49 @@ public class YugiOhGui {
                 if (seleccionado != null && seleccionado2 != null) {
                     int atkUsuario = 0, defUsuario = 0;
                     int atkMaquina = 0, defMaquina = 0;
+                    String nombreUsuario = "";
+                    String nombreMaquina = "";
 
                     // Jugador
                     if (seleccionado == checkBox1) {
+                        nombreUsuario = nomUsu1.getText();
                         atkUsuario = Integer.parseInt(atkUsu1.getText());
                         defUsuario = Integer.parseInt(defUsu1.getText());
                         etiquetaDefUsuarioActual = defUsu1;
+                        nombresUsuario[0] = nombreUsuario;
                     } else if (seleccionado == checkBox2) {
+                        nombreUsuario = nomUsu2.getText();
                         atkUsuario = Integer.parseInt(atkUsu2.getText());
                         defUsuario = Integer.parseInt(defUsu2.getText());
                         etiquetaDefUsuarioActual = defUsu2;
+                        nombresUsuario[1] = nombreUsuario;
                     } else if (seleccionado == checkBox3) {
+                        nombreUsuario = nomUsu3.getText();
                         atkUsuario = Integer.parseInt(atkUsu3.getText());
                         defUsuario = Integer.parseInt(defUsu3.getText());
                         etiquetaDefUsuarioActual = defUsu3;
+                        nombresUsuario[2] = nombreUsuario;
                     }
 
                     // Máquina
                     if (seleccionado2 == checkBox4) {
+                        nombreMaquina = nomMaq1.getText();
                         atkMaquina = Integer.parseInt(atkMaq1.getText());
                         defMaquina = Integer.parseInt(defMaq1.getText());
                         etiquetaDefMaquinaActual = defMaq1;
+                        nombresMaquina[0] = nombreMaquina;
                     } else if (seleccionado2 == checkBox5) {
+                        nombreMaquina = nomMaq2.getText();
                         atkMaquina = Integer.parseInt(atkMaq2.getText());
                         defMaquina = Integer.parseInt(defMaq2.getText());
                         etiquetaDefMaquinaActual = defMaq2;
+                        nombresMaquina[1] = nombreMaquina;
                     } else if (seleccionado2 == checkBox6) {
+                        nombreMaquina = nomMaq3.getText();
                         atkMaquina = Integer.parseInt(atkMaq3.getText());
                         defMaquina = Integer.parseInt(defMaq3.getText());
                         etiquetaDefMaquinaActual = defMaq3;
+                        nombresMaquina[2] = nombreMaquina;
                     }
 
                     // Llamar al método fight()
@@ -291,7 +299,6 @@ public class YugiOhGui {
                 switch (slotCartas) {
                     case 1:
                         nomUsu1.setText(nombre);
-                        nombresUsuario[0] = nombre;
                         atkUsu1.setText(String.valueOf(atk));
                         defUsu1.setText(String.valueOf(def));
                         imgUsu1.setIcon(new ImageIcon(scaledImg));
@@ -299,7 +306,6 @@ public class YugiOhGui {
                         break;
                     case 2:
                         nomUsu2.setText(nombre);
-                        nombresUsuario[1] = nombre;
                         atkUsu2.setText(String.valueOf(atk));
                         defUsu2.setText(String.valueOf(def));
                         imgUsu2.setIcon(new ImageIcon(scaledImg));
@@ -307,7 +313,6 @@ public class YugiOhGui {
                         break;
                     case 3:
                         nomUsu3.setText(nombre);
-                        nombresUsuario[2] = nombre;
                         atkUsu3.setText(String.valueOf(atk));
                         defUsu3.setText(String.valueOf(def));
                         imgUsu3.setIcon(new ImageIcon(scaledImg));
@@ -382,7 +387,6 @@ public class YugiOhGui {
                         switch (numCartas) {
                             case 1:
                                 nomMaq1.setText(nombre);
-                                nombresMaquina[0] = nombre;
                                 atkMaq1.setText(String.valueOf(atk));
                                 defMaq1.setText(String.valueOf(def));
                                 imgMaq1.setIcon(new ImageIcon(scaledImg));
@@ -390,7 +394,6 @@ public class YugiOhGui {
                                 break;
                             case 2:
                                 nomMaq2.setText(nombre);
-                                nombresMaquina[1] = nombre;
                                 atkMaq2.setText(String.valueOf(atk));
                                 defMaq2.setText(String.valueOf(def));
                                 imgMaq2.setIcon(new ImageIcon(scaledImg));
@@ -398,7 +401,6 @@ public class YugiOhGui {
                                 break;
                             case 3:
                                 nomMaq3.setText(nombre);
-                                nombresMaquina[2] = nombre;
                                 atkMaq3.setText(String.valueOf(atk));
                                 defMaq3.setText(String.valueOf(def));
                                 imgMaq3.setIcon(new ImageIcon(scaledImg));
@@ -503,14 +505,11 @@ public class YugiOhGui {
         if (puntajeUsuario == 2) {
             JOptionPane.showMessageDialog(mainPanel, "🎉 ¡El jugador gana la partida!");
             puntajeFinalUsuario++;
-            cartaUsuario.setEnabled(true);
-            cartaMaquina.setEnabled(true);
+
             reiniciarJuego();
         } else if (puntajeMaquina == 2) {
             JOptionPane.showMessageDialog(mainPanel, "🤖 ¡La máquina gana la partida!");
             puntajeFinalMaquina++;
-            cartaUsuario.setEnabled(true);
-            cartaMaquina.setEnabled(true);
             reiniciarJuego();
         }
     }
@@ -525,31 +524,43 @@ public class YugiOhGui {
         defUsu1.setText(String.valueOf(""));
         imgUsu1.setIcon(new ImageIcon(""));
         checkBox1.setVisible(false);
+        checkBox1.setEnabled(true);
+        checkBox1.setSelected(false);
         nomUsu2.setText("");
         atkUsu2.setText(String.valueOf(""));
         defUsu2.setText(String.valueOf(""));
         imgUsu2.setIcon(new ImageIcon(""));
         checkBox2.setVisible(false);
+        checkBox2.setEnabled(true);
+        checkBox2.setSelected(false);
         nomUsu3.setText("");
         atkUsu3.setText(String.valueOf(""));
         defUsu3.setText(String.valueOf(""));
         imgUsu3.setIcon(new ImageIcon(""));
         checkBox3.setVisible(false);
+        checkBox3.setEnabled(true);
+        checkBox3.setSelected(false);
         nomMaq1.setText("");
         atkMaq1.setText(String.valueOf(""));
         defMaq1.setText(String.valueOf(""));
         imgMaq1.setIcon(new ImageIcon(""));
         checkBox4.setVisible(false);
+        checkBox4.setEnabled(true);
+        checkBox4.setSelected(false);
         nomMaq2.setText("");
         atkMaq2.setText(String.valueOf(""));
         defMaq2.setText(String.valueOf(""));
         imgMaq2.setIcon(new ImageIcon(""));
         checkBox5.setVisible(false);
+        checkBox5.setEnabled(true);
+        checkBox5.setSelected(false);
         nomMaq3.setText("");
         atkMaq3.setText(String.valueOf(""));
         defMaq3.setText(String.valueOf(""));
         imgMaq3.setIcon(new ImageIcon(""));
         checkBox6.setVisible(false);
+        checkBox6.setEnabled(true);
+        checkBox6.setSelected(false);
 
         // Aquí podrías limpiar los labels e imágenes
         // o simplemente reiniciar el programa si quieres
@@ -564,7 +575,7 @@ public class YugiOhGui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1500,1500);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 }
