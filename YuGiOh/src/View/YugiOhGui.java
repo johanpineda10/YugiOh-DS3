@@ -68,6 +68,10 @@ public class YugiOhGui {
     private JLabel etiquetaDefMaquinaActual;
     private int puntajeUsuario = 0;
     private int puntajeMaquina = 0;
+    private int puntajeFinalUsuario = 0;
+    private int puntajeFinalMaquina = 0;
+    private String[] nombresUsuario = new String[3];
+    private String[] nombresMaquina = new String[3];
 
     public YugiOhGui() {
 
@@ -102,6 +106,7 @@ public class YugiOhGui {
                         cartaSeleccionada++;
                     }else{
                         JOptionPane.showMessageDialog(mainPanel, "Ya seleccionaste las 3 cartas");
+                        JOptionPane.showMessageDialog(mainPanel, "Nota: Esperar a que carguen cartas maquina");
                         rellenarMaquina();
                     }
                 }
@@ -161,6 +166,48 @@ public class YugiOhGui {
                 } else {
                     JOptionPane.showMessageDialog(mainPanel,"Aun te faltan cartas por elegir");
                 }
+            }
+        });
+        LOGButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder texto = new StringBuilder();
+                JTextArea areaTexto = new JTextArea(10, 30);
+                areaTexto.setLineWrap(true);
+                areaTexto.setWrapStyleWord(true);
+                areaTexto.setEditable(false); // 🔹 No se puede editar
+                // Agregar los puntajes generales
+                texto.append("Puntaje Final Usuario: ").append(puntajeFinalUsuario).append("\n");
+                texto.append("Puntaje Final Máquina: ").append(puntajeFinalMaquina).append("\n");
+                texto.append("Partidas ganadas Usuario: ").append(puntajeUsuario).append("\n");
+                texto.append("Partidas ganadas Máquina: ").append(puntajeMaquina).append("\n\n");
+
+                texto.append("Cartas usadas por el Usuario:\n");
+                for (String nombreCarta : nombresUsuario) {
+                    if (nombreCarta != null) { // evita mostrar null
+                        texto.append(" - ").append(nombreCarta).append("\n");
+                    }
+                }
+
+                //  Cartas de la Máquina
+                texto.append("\nCartas usadas por la Máquina:\n");
+                for (String nombreCarta : nombresMaquina) {
+                    if (nombreCarta != null) {
+                        texto.append(" - ").append(nombreCarta).append("\n");
+                    }
+                }
+
+                areaTexto.setText(texto.toString());
+
+
+                JScrollPane scrollPane = new JScrollPane(areaTexto);
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        scrollPane,
+                        "Datos de partida",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             }
         });
     }
@@ -244,6 +291,7 @@ public class YugiOhGui {
                 switch (slotCartas) {
                     case 1:
                         nomUsu1.setText(nombre);
+                        nombresUsuario[0] = nombre;
                         atkUsu1.setText(String.valueOf(atk));
                         defUsu1.setText(String.valueOf(def));
                         imgUsu1.setIcon(new ImageIcon(scaledImg));
@@ -251,6 +299,7 @@ public class YugiOhGui {
                         break;
                     case 2:
                         nomUsu2.setText(nombre);
+                        nombresUsuario[1] = nombre;
                         atkUsu2.setText(String.valueOf(atk));
                         defUsu2.setText(String.valueOf(def));
                         imgUsu2.setIcon(new ImageIcon(scaledImg));
@@ -258,6 +307,7 @@ public class YugiOhGui {
                         break;
                     case 3:
                         nomUsu3.setText(nombre);
+                        nombresUsuario[2] = nombre;
                         atkUsu3.setText(String.valueOf(atk));
                         defUsu3.setText(String.valueOf(def));
                         imgUsu3.setIcon(new ImageIcon(scaledImg));
@@ -332,6 +382,7 @@ public class YugiOhGui {
                         switch (numCartas) {
                             case 1:
                                 nomMaq1.setText(nombre);
+                                nombresMaquina[0] = nombre;
                                 atkMaq1.setText(String.valueOf(atk));
                                 defMaq1.setText(String.valueOf(def));
                                 imgMaq1.setIcon(new ImageIcon(scaledImg));
@@ -339,6 +390,7 @@ public class YugiOhGui {
                                 break;
                             case 2:
                                 nomMaq2.setText(nombre);
+                                nombresMaquina[1] = nombre;
                                 atkMaq2.setText(String.valueOf(atk));
                                 defMaq2.setText(String.valueOf(def));
                                 imgMaq2.setIcon(new ImageIcon(scaledImg));
@@ -346,6 +398,7 @@ public class YugiOhGui {
                                 break;
                             case 3:
                                 nomMaq3.setText(nombre);
+                                nombresMaquina[2] = nombre;
                                 atkMaq3.setText(String.valueOf(atk));
                                 defMaq3.setText(String.valueOf(def));
                                 imgMaq3.setIcon(new ImageIcon(scaledImg));
@@ -380,9 +433,12 @@ public class YugiOhGui {
 
         int nuevaDefUsu = defUsu;
         int nuevaDefMaq = defMaq;
+        boolean desactivarCheck = false;
+        boolean estadoAtkUsu = atkUsu >= defUsu ;
+        boolean estadoAtkMaq = atkMaq >= defMaq ;
 
-        boolean estadoAtkUsu = atkUsu > defUsu;
-        boolean estadoAtkMaq = atkMaq > defMaq;
+        System.out.println(estadoAtkMaq);
+        System.out.println(estadoAtkMaq);
 
         System.out.println("usuario en ataque?: " + estadoAtkUsu);
         System.out.println("maquina en ataque?: " + estadoAtkMaq);
@@ -390,36 +446,55 @@ public class YugiOhGui {
         // Lógica del enfrentamiento
         if (estadoAtkUsu && estadoAtkMaq) {
             if (atkUsu > atkMaq) {
-                JOptionPane.showMessageDialog(mainPanel, "Gana Usuario");
+                JOptionPane.showMessageDialog(mainPanel, "¡Usuario gana esta ronda!");
+                desactivarCheck = true;
                 puntajeUsuario++;
             } else if (atkUsu < atkMaq) {
-                JOptionPane.showMessageDialog(mainPanel, "Gana Máquina");
+                JOptionPane.showMessageDialog(mainPanel, "¡Máquina gana esta ronda!");
+                desactivarCheck = true;
                 puntajeMaquina++;
             } else {
                 JOptionPane.showMessageDialog(mainPanel, "Empate");
             }
-        } else if (!estadoAtkUsu && estadoAtkMaq) {
-            nuevaDefUsu = defUsu - (atkMaq - defUsu);
-            if (nuevaDefUsu < 0) nuevaDefUsu = 0;
-            JOptionPane.showMessageDialog(mainPanel, "Gana Máquina (la defensa del usuario bajó a " + nuevaDefUsu + ")");
-            puntajeMaquina++;
-        } else if (estadoAtkUsu && !estadoAtkMaq) {
-            nuevaDefMaq = defMaq - (atkUsu - defMaq);
-            if (nuevaDefMaq < 0) nuevaDefMaq = 0;
-            JOptionPane.showMessageDialog(mainPanel, "Gana Usuario (la defensa de la máquina bajó a " + nuevaDefMaq + ")");
-            puntajeUsuario++;
+        } else if (estadoAtkUsu == false && estadoAtkMaq) {
+            nuevaDefUsu = defUsu - atkMaq;
+            System.out.println("ENTRO EN EL PENULTIMO" + nuevaDefUsu + "usuario" + defUsu);
+            JOptionPane.showMessageDialog(mainPanel, "la defensa del usuario bajó");
+
+            if (nuevaDefUsu <= 0) {
+                nuevaDefUsu = 0;
+                JOptionPane.showMessageDialog(mainPanel, "¡Máquina gana esta ronda!");
+                desactivarCheck = true;
+                puntajeMaquina++;
+            }
+        } else if (estadoAtkUsu && estadoAtkMaq == false) {
+            nuevaDefMaq = defMaq - atkUsu;
+            JOptionPane.showMessageDialog(mainPanel, "La defensa de la máquina bajó");
+            if (nuevaDefMaq <= 0) {
+                nuevaDefMaq = 0;
+                JOptionPane.showMessageDialog(mainPanel, "¡Usuario gana esta ronda!");
+                desactivarCheck = true;
+                puntajeUsuario++;
+            }
+        } else if (estadoAtkUsu == false && estadoAtkMaq == false) {
+            JOptionPane.showMessageDialog(mainPanel, "Ambos en defensa");
+
         }
 
         // Actualizar defensas visualmente
-        etiquetaDefUsuarioActual.setText("" + nuevaDefUsu);
-        etiquetaDefMaquinaActual.setText("" + nuevaDefMaq);
+        etiquetaDefUsuarioActual.setText("" + Math.max(nuevaDefUsu, 0));
+        etiquetaDefMaquinaActual.setText("" + Math.max(nuevaDefMaq, 0));
+
         punUsu.setText("Puntaje: " + puntajeUsuario);
         punMaq.setText("Puntaje: " + puntajeMaquina);
-        // Desactivar cartas usadas
-        cartaUsuario.setEnabled(false);
-        cartaMaquina.setEnabled(false);
-        cartaUsuario.setSelected(false);
-        cartaMaquina.setSelected(false);
+
+// 🔹 Desactivar cartas solo si corresponde
+        if (desactivarCheck) {
+            cartaUsuario.setEnabled(false);
+            cartaMaquina.setEnabled(false);
+            cartaUsuario.setSelected(false);
+            cartaMaquina.setSelected(false);
+        }
 
         // 🔹 Mostrar marcador actual
         System.out.println("Marcador -> Usuario: " + puntajeUsuario + " | Máquina: " + puntajeMaquina);
@@ -427,20 +502,54 @@ public class YugiOhGui {
         // 🔹 Verificar si alguien ganó 2 combates
         if (puntajeUsuario == 2) {
             JOptionPane.showMessageDialog(mainPanel, "🎉 ¡El jugador gana la partida!");
-
+            puntajeFinalUsuario++;
+            cartaUsuario.setEnabled(true);
+            cartaMaquina.setEnabled(true);
             reiniciarJuego();
         } else if (puntajeMaquina == 2) {
             JOptionPane.showMessageDialog(mainPanel, "🤖 ¡La máquina gana la partida!");
-
+            puntajeFinalMaquina++;
+            cartaUsuario.setEnabled(true);
+            cartaMaquina.setEnabled(true);
             reiniciarJuego();
         }
     }
 
     private void reiniciarJuego() {
-        puntajeUsuario = 0;
-        puntajeMaquina = 0;
+        punUsu.setText("Puntaje: " );
+        punMaq.setText("Puntaje: " );
         cartaSeleccionada = 1;
         numCartas = 0;
+        nomUsu1.setText("");
+        atkUsu1.setText(String.valueOf(""));
+        defUsu1.setText(String.valueOf(""));
+        imgUsu1.setIcon(new ImageIcon(""));
+        checkBox1.setVisible(false);
+        nomUsu2.setText("");
+        atkUsu2.setText(String.valueOf(""));
+        defUsu2.setText(String.valueOf(""));
+        imgUsu2.setIcon(new ImageIcon(""));
+        checkBox2.setVisible(false);
+        nomUsu3.setText("");
+        atkUsu3.setText(String.valueOf(""));
+        defUsu3.setText(String.valueOf(""));
+        imgUsu3.setIcon(new ImageIcon(""));
+        checkBox3.setVisible(false);
+        nomMaq1.setText("");
+        atkMaq1.setText(String.valueOf(""));
+        defMaq1.setText(String.valueOf(""));
+        imgMaq1.setIcon(new ImageIcon(""));
+        checkBox4.setVisible(false);
+        nomMaq2.setText("");
+        atkMaq2.setText(String.valueOf(""));
+        defMaq2.setText(String.valueOf(""));
+        imgMaq2.setIcon(new ImageIcon(""));
+        checkBox5.setVisible(false);
+        nomMaq3.setText("");
+        atkMaq3.setText(String.valueOf(""));
+        defMaq3.setText(String.valueOf(""));
+        imgMaq3.setIcon(new ImageIcon(""));
+        checkBox6.setVisible(false);
 
         // Aquí podrías limpiar los labels e imágenes
         // o simplemente reiniciar el programa si quieres
